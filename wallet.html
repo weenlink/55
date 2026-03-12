@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoSocial — Кошелек</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Left Sidebar */
+        .sidebar-left {
+            width: 280px;
+            border-right: 1px solid #1f1f2e;
+            padding: 20px 16px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            background-color: #0a0a0f;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+            padding-left: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            border-radius: 30px;
+            color: #b0b0c0;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            width: 24px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #1f1f2e;
+            color: white;
+        }
+
+        .nav-item.active i {
+            color: #a855f7;
+        }
+
+        .nav-section {
+            margin: 24px 0 16px;
+            padding-left: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b6b7a;
+        }
+
+        .connect-wallet {
+            margin-top: 24px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: 100%;
+        }
+
+        .connect-wallet:hover {
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 600px;
+            border-right: 1px solid #1f1f2e;
+            padding: 20px;
+        }
+
+        /* Wallet Header */
+        .wallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .wallet-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .wallet-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background-color: #1a1a24;
+            border: 1px solid #2a2a35;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a855f7;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .icon-btn:hover {
+            background-color: #a855f7;
+            color: white;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, #1a1a24, #2a1a3a);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #a855f7;
+        }
+
+        .balance-label {
+            color: #b0b0c0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .balance-change {
+            display: flex;
+            gap: 16px;
+            color: #10b981;
+            font-size: 14px;
+        }
+
+        .balance-change i {
+            margin-right: 4px;
+        }
+
+        .balance-change .negative {
+            color: #ef4444;
+        }
+
+        /* Action Buttons */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .action-btn {
+            background-color: #1a1a24;
+            border: 1px solid #2a2a35;
+            border-radius: 16px;
+            padding: 12px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .action-btn i {
+            font-size: 24px;
+            color: #a855f7;
+        }
+
+        .action-btn span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .action-btn:hover {
+            background-color: #2a2a35;
+            border-color: #a855f7;
+        }
+
+        /* Assets Section */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .asset-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: #1a1a24;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            border: 1px solid #2a2a35;
+        }
+
+        .asset-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .asset-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .asset-details h4 {
+            font-weight: 600;
+        }
+
+        .asset-details p {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .asset-value {
+            text-align: right;
+        }
+
+        .asset-value .amount {
+            font-weight: 600;
+        }
+
+        .asset-value .usd {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .asset-change {
+            margin-left: 16px;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .asset-change.positive {
+            color: #10b981;
+        }
+
+        .asset-change.negative {
+            color: #ef4444;
+        }
+
+        /* Transactions */
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #1f1f2e;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #1a1a24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a855f7;
+        }
+
+        .transaction-info h4 {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .transaction-info p {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .transaction-right {
+            text-align: right;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .transaction-date {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .transaction-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .status-completed {
+            background-color: #10b98120;
+            color: #10b981;
+        }
+
+        .status-pending {
+            background-color: #f59e0b20;
+            color: #f59e0b;
+        }
+
+        /* Right Sidebar */
+        .sidebar-right {
+            width: 320px;
+            padding: 20px 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .search-box {
+            background-color: #1a1a24;
+            border-radius: 30px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .search-box i {
+            color: #6b6b7a;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%;
+        }
+
+        .widget {
+            background-color: #1a1a24;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .trend-item, .follow-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .trend-info h4 {
+            font-size: 16px;
+        }
+
+        .trend-info p {
+            font-size: 14px;
+            color: #6b6b7a;
+        }
+
+        .follow-btn {
+            background: transparent;
+            border: 1px solid #a855f7;
+            border-radius: 30px;
+            padding: 6px 16px;
+            color: #a855f7;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .crypto-price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .price-up {
+            color: #10b981;
+        }
+
+        .price-down {
+            color: #ef4444;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 1000px) {
+            .sidebar-right {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-left {
+                display: none;
+            }
+            .main-content {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <!-- Левая боковая панель (навигация) -->
+    <aside class="sidebar-left">
+        <div class="logo">CryptoSocial</div>
+        <div class="nav-item">
+            <i class="fas fa-home"></i> <span>Главная</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-search"></i> <span>Поиск</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-bell"></i> <span>Уведомления</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-envelope"></i> <span>Сообщения</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-user"></i> <span>Профиль</span>
+        </div>
+
+        <div class="nav-section">Крипто</div>
+        <div class="nav-item active">
+            <i class="fas fa-wallet"></i> <span>Кошелек</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-coins"></i> <span>Токен-гейтинг</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-chart-line"></i> <span>Графики</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-image"></i> <span>NFT галерея</span>
+        </div>
+
+        <button class="connect-wallet">
+            <i class="fas fa-wallet"></i> Подключить кошелёк
+        </button>
+    </aside>
+
+    <!-- Основной контент (кошелек) -->
+    <main class="main-content">
+        <!-- Заголовок и действия -->
+        <div class="wallet-header">
+            <h1>Кошелек</h1>
+            <div class="wallet-actions">
+                <div class="icon-btn"><i class="fas fa-sync-alt"></i></div>
+                <div class="icon-btn"><i class="fas fa-cog"></i></div>
+            </div>
+        </div>
+
+        <!-- Карточка баланса -->
+        <div class="balance-card">
+            <div class="balance-label">Общий баланс</div>
+            <div class="balance-amount">$12,345.67</div>
+            <div class="balance-change">
+                <span><i class="fas fa-arrow-up"></i> +2.3% (24ч)</span>
+                <span class="negative"><i class="fas fa-arrow-down"></i> -0.5% (неделя)</span>
+            </div>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="action-grid">
+            <div class="action-btn">
+                <i class="fas fa-paper-plane"></i>
+                <span>Отправить</span>
+            </div>
+            <div class="action-btn">
+                <i class="fas fa-download"></i>
+                <span>Получить</span>
+            </div>
+            <div class="action-btn">
+                <i class="fas fa-credit-card"></i>
+                <span>Купить</span>
+            </div>
+            <div class="action-btn">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Обменять</span>
+            </div>
+        </div>
+
+        <!-- Список активов -->
+        <div class="section-title">
+            Активы
+            <span style="color:#a855f7; font-size:14px; cursor:pointer;">Управление</span>
+        </div>
+
+        <div class="asset-item">
+            <div class="asset-info">
+                <div class="asset-icon">₿</div>
+                <div class="asset-details">
+                    <h4>Bitcoin</h4>
+                    <p>BTC</p>
+                </div>
+            </div>
+            <div class="asset-value">
+                <div class="amount">0.1234 BTC</div>
+                <div class="usd">$8,345.67</div>
+            </div>
+            <div class="asset-change positive">+2.3%</div>
+        </div>
+
+        <div class="asset-item">
+            <div class="asset-info">
+                <div class="asset-icon">Ξ</div>
+                <div class="asset-details">
+                    <h4>Ethereum</h4>
+                    <p>ETH</p>
+                </div>
+            </div>
+            <div class="asset-value">
+                <div class="amount">1.5678 ETH</div>
+                <div class="usd">$5,234.56</div>
+            </div>
+            <div class="asset-change positive">+1.2%</div>
+        </div>
+
+        <div class="asset-item">
+            <div class="asset-info">
+                <div class="asset-icon"><i class="fas fa-dollar-sign"></i></div>
+                <div class="asset-details">
+                    <h4>USDT</h4>
+                    <p>ERC-20</p>
+                </div>
+            </div>
+            <div class="asset-value">
+                <div class="amount">2,500 USDT</div>
+                <div class="usd">$2,500.00</div>
+            </div>
+            <div class="asset-change negative">-0.1%</div>
+        </div>
+
+        <div class="asset-item">
+            <div class="asset-info">
+                <div class="asset-icon"><i class="fas fa-leaf"></i></div>
+                <div class="asset-details">
+                    <h4>Solana</h4>
+                    <p>SOL</p>
+                </div>
+            </div>
+            <div class="asset-value">
+                <div class="amount">12.5 SOL</div>
+                <div class="usd">$2,150.00</div>
+            </div>
+            <div class="asset-change positive">+5.4%</div>
+        </div>
+
+        <!-- История транзакций -->
+        <div class="section-title" style="margin-top: 32px;">
+            История транзакций
+            <span style="color:#a855f7; font-size:14px; cursor:pointer;">Все</span>
+        </div>
+
+        <div class="transaction-item">
+            <div class="transaction-left">
+                <div class="transaction-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="transaction-info">
+                    <h4>Отправлено</h4>
+                    <p>На адрес 0x3f...c2e1</p>
+                </div>
+            </div>
+            <div class="transaction-right">
+                <div class="transaction-amount">-0.05 ETH</div>
+                <div class="transaction-date">2 часа назад</div>
+                <div class="transaction-status status-completed">Завершено</div>
+            </div>
+        </div>
+
+        <div class="transaction-item">
+            <div class="transaction-left">
+                <div class="transaction-icon"><i class="fas fa-arrow-down"></i></div>
+                <div class="transaction-info">
+                    <h4>Получено</h4>
+                    <p>От binance</p>
+                </div>
+            </div>
+            <div class="transaction-right">
+                <div class="transaction-amount">+0.1 BTC</div>
+                <div class="transaction-date">5 часов назад</div>
+                <div class="transaction-status status-completed">Завершено</div>
+            </div>
+        </div>
+
+        <div class="transaction-item">
+            <div class="transaction-left">
+                <div class="transaction-icon"><i class="fas fa-exchange-alt"></i></div>
+                <div class="transaction-info">
+                    <h4>Обмен</h4>
+                    <p>USDT → ETH</p>
+                </div>
+            </div>
+            <div class="transaction-right">
+                <div class="transaction-amount">500 USDT</div>
+                <div class="transaction-date">вчера</div>
+                <div class="transaction-status status-completed">Завершено</div>
+            </div>
+        </div>
+
+        <div class="transaction-item">
+            <div class="transaction-left">
+                <div class="transaction-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="transaction-info">
+                    <h4>Отправлено</h4>
+                    <p>На биржу</p>
+                </div>
+            </div>
+            <div class="transaction-right">
+                <div class="transaction-amount">-100 SOL</div>
+                <div class="transaction-date">2 дня назад</div>
+                <div class="transaction-status status-pending">В обработке</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Правая боковая панель (виджеты) -->
+    <aside class="sidebar-right">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Поиск">
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Крипто-тренды</div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#Bitcoin</h4>
+                    <p>$67,890 <span class="price-up">+2.3%</span></p>
+                </div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#Ethereum</h4>
+                    <p>$3,450 <span class="price-up">+1.2%</span></p>
+                </div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#PEPE</h4>
+                    <p>$0.000012 <span class="price-down">-5.1%</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Кого читать</div>
+            <div class="follow-item">
+                <div>
+                    <strong>binance</strong><br>
+                    <span style="color:#6b6b7a;">@binance</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+            <div class="follow-item">
+                <div>
+                    <strong>vitalik.eth</strong><br>
+                    <span style="color:#6b6b7a;">@vitalik</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+            <div class="follow-item">
+                <div>
+                    <strong>punk6529</strong><br>
+                    <span style="color:#6b6b7a;">@punk</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Цены</div>
+            <div class="crypto-price">
+                <span>BTC</span> <span class="price-up">▲ $67,890</span>
+            </div>
+            <div class="crypto-price">
+                <span>ETH</span> <span class="price-up">▲ $3,450</span>
+            </div>
+            <div class="crypto-price">
+                <span>BNB</span> <span class="price-down">▼ $580</span>
+            </div>
+            <div class="crypto-price">
+                <span>SOL</span> <span class="price-up">▲ $172</span>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<!-- Небольшой скрипт для переключения активного пункта меню (демо) -->
+<script>
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>
