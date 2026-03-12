@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoSocial — Поиск</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Left Sidebar */
+        .sidebar-left {
+            width: 280px;
+            border-right: 1px solid #1f1f2e;
+            padding: 20px 16px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            background-color: #0a0a0f;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+            padding-left: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            border-radius: 30px;
+            color: #b0b0c0;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            width: 24px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #1f1f2e;
+            color: white;
+        }
+
+        .nav-item.active i {
+            color: #a855f7;
+        }
+
+        .nav-section {
+            margin: 24px 0 16px;
+            padding-left: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b6b7a;
+        }
+
+        .connect-wallet {
+            margin-top: 24px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: 100%;
+        }
+
+        .connect-wallet:hover {
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 600px;
+            border-right: 1px solid #1f1f2e;
+            padding: 20px;
+        }
+
+        /* Search Header */
+        .search-header {
+            margin-bottom: 24px;
+        }
+
+        .search-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .search-box-large {
+            background-color: #1a1a24;
+            border-radius: 40px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #2a2a35;
+        }
+
+        .search-box-large i {
+            color: #a855f7;
+            font-size: 20px;
+        }
+
+        .search-box-large input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            outline: none;
+            width: 100%;
+        }
+
+        .search-box-large input::placeholder {
+            color: #6b6b7a;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 12px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 8px 20px;
+            border-radius: 30px;
+            background-color: #1a1a24;
+            border: 1px solid #2a2a35;
+            color: #b0b0c0;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            border-color: transparent;
+            color: white;
+        }
+
+        .filter-tab:hover {
+            border-color: #a855f7;
+        }
+
+        /* Search Results */
+        .result-section {
+            margin-bottom: 32px;
+        }
+
+        .result-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-section-title i {
+            color: #a855f7;
+        }
+
+        /* Post Result */
+        .feed-item {
+            padding: 20px;
+            border-bottom: 1px solid #1f1f2e;
+            display: flex;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .feed-item:hover {
+            background-color: #0f0f17;
+        }
+
+        .feed-item .avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+        }
+
+        .feed-content {
+            flex: 1;
+        }
+
+        .feed-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+
+        .feed-author {
+            font-weight: 700;
+            color: white;
+        }
+
+        .feed-handle {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .feed-time {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .highlight {
+            background-color: #a855f740;
+            padding: 2px 0;
+            border-radius: 4px;
+        }
+
+        .feed-text {
+            margin: 8px 0 12px;
+            white-space: pre-line;
+        }
+
+        .feed-media {
+            background-color: #1a1a24;
+            border-radius: 16px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b6b7a;
+            margin: 12px 0;
+            border: 1px solid #2a2a35;
+        }
+
+        .feed-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 12px;
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .feed-stats i {
+            margin-right: 6px;
+            color: #a855f7;
+        }
+
+        /* User Result */
+        .user-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #1f1f2e;
+        }
+
+        .user-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-details h4 {
+            font-weight: 600;
+        }
+
+        .user-details p {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .user-follow-btn {
+            background: transparent;
+            border: 1px solid #a855f7;
+            border-radius: 30px;
+            padding: 6px 16px;
+            color: #a855f7;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* NFT Result */
+        .nft-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .nft-card {
+            background-color: #1a1a24;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #2a2a35;
+        }
+
+        .nft-preview {
+            aspect-ratio: 1;
+            background-color: #0f0f17;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b6b7a;
+            margin-bottom: 12px;
+        }
+
+        .nft-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .nft-collection {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .nft-price {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .nft-price .value {
+            color: #10b981;
+        }
+
+        /* Right Sidebar */
+        .sidebar-right {
+            width: 320px;
+            padding: 20px 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .search-box {
+            background-color: #1a1a24;
+            border-radius: 30px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .search-box i {
+            color: #6b6b7a;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%;
+        }
+
+        .widget {
+            background-color: #1a1a24;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .trend-item, .follow-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .trend-info h4 {
+            font-size: 16px;
+        }
+
+        .trend-info p {
+            font-size: 14px;
+            color: #6b6b7a;
+        }
+
+        .follow-btn {
+            background: transparent;
+            border: 1px solid #a855f7;
+            border-radius: 30px;
+            padding: 6px 16px;
+            color: #a855f7;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .crypto-price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .price-up {
+            color: #10b981;
+        }
+
+        .price-down {
+            color: #ef4444;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 1000px) {
+            .sidebar-right {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-left {
+                display: none;
+            }
+            .main-content {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <!-- Левая боковая панель (навигация) -->
+    <aside class="sidebar-left">
+        <div class="logo">CryptoSocial</div>
+        <div class="nav-item">
+            <i class="fas fa-home"></i> <span>Главная</span>
+        </div>
+        <div class="nav-item active">
+            <i class="fas fa-search"></i> <span>Поиск</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-bell"></i> <span>Уведомления</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-envelope"></i> <span>Сообщения</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-user"></i> <span>Профиль</span>
+        </div>
+
+        <div class="nav-section">Крипто</div>
+        <div class="nav-item">
+            <i class="fas fa-wallet"></i> <span>Кошелек</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-coins"></i> <span>Токен-гейтинг</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-chart-line"></i> <span>Графики</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-image"></i> <span>NFT галерея</span>
+        </div>
+
+        <button class="connect-wallet">
+            <i class="fas fa-wallet"></i> Подключить кошелёк
+        </button>
+    </aside>
+
+    <!-- Основной контент (поиск) -->
+    <main class="main-content">
+        <div class="search-header">
+            <h1>Поиск</h1>
+            <div class="search-box-large">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Поиск по постам, людям, NFT..." value="bitcoin">
+            </div>
+        </div>
+
+        <!-- Фильтры -->
+        <div class="filter-tabs">
+            <div class="filter-tab active">Все</div>
+            <div class="filter-tab">Посты</div>
+            <div class="filter-tab">Люди</div>
+            <div class="filter-tab">NFT</div>
+            <div class="filter-tab">Токены</div>
+        </div>
+
+        <!-- Результаты: Посты -->
+        <div class="result-section">
+            <div class="result-section-title">
+                <i class="fas fa-file-alt"></i> Посты
+            </div>
+            <div class="feed-item">
+                <div class="avatar-small">B</div>
+                <div class="feed-content">
+                    <div class="feed-header">
+                        <span class="feed-author">Binance</span>
+                        <span class="feed-handle">@binance · 2ч</span>
+                    </div>
+                    <div class="feed-text">
+                        Новый листинг: <span class="highlight">$BTC</span> пары теперь доступен на споте! Торги начались 🚀
+                    </div>
+                    <div class="feed-stats">
+                        <span><i class="fas fa-heart"></i> 2.3K</span>
+                        <span><i class="fas fa-comment"></i> 189</span>
+                    </div>
+                </div>
+            </div>
+            <div class="feed-item">
+                <div class="avatar-small">V</div>
+                <div class="feed-content">
+                    <div class="feed-header">
+                        <span class="feed-author">Vitalik.eth</span>
+                        <span class="feed-handle">@vitalik · 5ч</span>
+                    </div>
+                    <div class="feed-text">
+                        Обсуждение масштабирования <span class="highlight">#Bitcoin</span> через Lightning Network.
+                    </div>
+                    <div class="feed-stats">
+                        <span><i class="fas fa-heart"></i> 8.9K</span>
+                        <span><i class="fas fa-comment"></i> 612</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Результаты: Люди -->
+        <div class="result-section">
+            <div class="result-section-title">
+                <i class="fas fa-users"></i> Люди
+            </div>
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="user-avatar">S</div>
+                    <div class="user-details">
+                        <h4>Michael Saylor <span style="color:#6b6b7a; font-size:14px; font-weight:normal;">(совпадает: <span class="highlight">bitcoin</span>)</span></h4>
+                        <p>@saylor · 2.1M подписчиков</p>
+                    </div>
+                </div>
+                <button class="user-follow-btn">Подписаться</button>
+            </div>
+            <div class="user-item">
+                <div class="user-info">
+                    <div class="user-avatar">C</div>
+                    <div class="user-details">
+                        <h4>CryptoWhale <span style="color:#6b6b7a; font-size:14px; font-weight:normal;">(совпадает: <span class="highlight">bitcoin</span> аналитика)</span></h4>
+                        <p>@cryptowhale · 45.6K подписчиков</p>
+                    </div>
+                </div>
+                <button class="user-follow-btn">Подписаться</button>
+            </div>
+        </div>
+
+        <!-- Результаты: NFT -->
+        <div class="result-section">
+            <div class="result-section-title">
+                <i class="fas fa-image"></i> NFT
+            </div>
+            <div class="nft-grid">
+                <div class="nft-card">
+                    <div class="nft-preview"><i class="fas fa-image" style="font-size: 32px;"></i></div>
+                    <div class="nft-title">Bitcoin Wizard</div>
+                    <div class="nft-collection">CryptoPunks</div>
+                    <div class="nft-price">
+                        <span>Цена</span>
+                        <span class="value">0.5 ETH</span>
+                    </div>
+                </div>
+                <div class="nft-card">
+                    <div class="nft-preview"><i class="fas fa-image" style="font-size: 32px;"></i></div>
+                    <div class="nft-title">Ordinal #1234</div>
+                    <div class="nft-collection">Bitcoin Ordinals</div>
+                    <div class="nft-price">
+                        <span>Цена</span>
+                        <span class="value">0.08 BTC</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Результаты: Токены (пример) -->
+        <div class="result-section">
+            <div class="result-section-title">
+                <i class="fas fa-coins"></i> Токены
+            </div>
+            <div class="asset-item" style="background-color:#1a1a24; border-radius:16px; padding:16px; margin-bottom:8px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="asset-icon" style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #a855f7, #3b82f6); display:flex; align-items:center; justify-content:center;">₿</div>
+                    <div>
+                        <h4>Bitcoin (BTC)</h4>
+                        <p style="color:#6b6b7a;">$67,890</p>
+                    </div>
+                </div>
+                <div style="color:#10b981;">+2.3%</div>
+            </div>
+            <div class="asset-item" style="background-color:#1a1a24; border-radius:16px; padding:16px; margin-bottom:8px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="asset-icon" style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #a855f7, #3b82f6); display:flex; align-items:center; justify-content:center;">₿</div>
+                    <div>
+                        <h4>Bitcoin Cash (BCH)</h4>
+                        <p style="color:#6b6b7a;">$450</p>
+                    </div>
+                </div>
+                <div style="color:#10b981;">+0.5%</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Правая боковая панель (виджеты) -->
+    <aside class="sidebar-right">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Поиск">
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Крипто-тренды</div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#Bitcoin</h4>
+                    <p>$67,890 <span class="price-up">+2.3%</span></p>
+                </div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#Ethereum</h4>
+                    <p>$3,450 <span class="price-up">+1.2%</span></p>
+                </div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#PEPE</h4>
+                    <p>$0.000012 <span class="price-down">-5.1%</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Кого читать</div>
+            <div class="follow-item">
+                <div>
+                    <strong>binance</strong><br>
+                    <span style="color:#6b6b7a;">@binance</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+            <div class="follow-item">
+                <div>
+                    <strong>vitalik.eth</strong><br>
+                    <span style="color:#6b6b7a;">@vitalik</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+            <div class="follow-item">
+                <div>
+                    <strong>punk6529</strong><br>
+                    <span style="color:#6b6b7a;">@punk</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Цены</div>
+            <div class="crypto-price">
+                <span>BTC</span> <span class="price-up">▲ $67,890</span>
+            </div>
+            <div class="crypto-price">
+                <span>ETH</span> <span class="price-up">▲ $3,450</span>
+            </div>
+            <div class="crypto-price">
+                <span>BNB</span> <span class="price-down">▼ $580</span>
+            </div>
+            <div class="crypto-price">
+                <span>SOL</span> <span class="price-up">▲ $172</span>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<!-- Небольшой скрипт для переключения фильтров и активного пункта меню (демо) -->
+<script>
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            // Здесь можно добавить логику фильтрации, но для демо просто показываем все результаты
+        });
+    });
+</script>
+</body>
+</html>
