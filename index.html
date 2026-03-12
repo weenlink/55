@@ -3,141 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mini Messenger Online</title>
+<title>CryptoGolod</title>
+
 <style>
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e5ddd5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  .chat-container {
-    width: 400px;
-    height: 600px;
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    overflow: hidden;
-  }
-  .chat-header {
-    background-color: #0088cc;
-    color: white;
-    padding: 15px;
-    font-weight: bold;
-    font-size: 18px;
-  }
-  .messages {
-    flex: 1;
-    padding: 15px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .message {
-    max-width: 70%;
-    padding: 10px 15px;
-    border-radius: 20px;
-    word-wrap: break-word;
-  }
-  .message.me {
-    background-color: #dcf8c6;
-    align-self: flex-end;
-  }
-  .message.friend {
-    background-color: #f1f0f0;
-    align-self: flex-start;
-  }
-  .input-container {
-    display: flex;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-  }
-  .input-container input {
-    flex: 1;
-    padding: 10px 15px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    outline: none;
-  }
-  .input-container button {
-    margin-left: 10px;
-    padding: 10px 15px;
-    border-radius: 20px;
-    border: none;
-    background-color: #0088cc;
-    color: white;
-    cursor: pointer;
-  }
-  .input-container button:hover {
-    background-color: #0077b3;
-  }
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#1e56d8;
+color:white;
+}
+
+.container{
+text-align:center;
+padding-top:60px;
+}
+
+.avatar{
+width:140px;
+height:140px;
+border-radius:50%;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:auto;
+font-size:70px;
+}
+
+.name{
+font-size:42px;
+font-weight:700;
+margin-top:20px;
+}
+
+.username{
+font-size:22px;
+color:#cfd7ff;
+margin-top:5px;
+}
+
+.menu{
+margin-top:40px;
+display:inline-flex;
+background:black;
+padding:12px;
+border-radius:40px;
+gap:10px;
+}
+
+.menu button{
+border:none;
+padding:12px 28px;
+border-radius:30px;
+font-size:18px;
+cursor:pointer;
+}
+
+.active{
+background:white;
+color:black;
+}
+
+.inactive{
+background:#444;
+color:white;
+}
+
+.feed{
+margin-top:60px;
+background:black;
+border-top-left-radius:80px;
+border-top-right-radius:80px;
+padding:40px;
+max-width:700px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.post{
+display:flex;
+gap:15px;
+margin-bottom:30px;
+border-bottom:1px solid #333;
+padding-bottom:20px;
+}
+
+.post-avatar{
+width:50px;
+height:50px;
+border-radius:50%;
+background:#1e56d8;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+}
+
+.post-content{
+flex:1;
+}
+
+.post-header{
+font-size:16px;
+}
+
+.post-header span{
+color:#888;
+margin-left:6px;
+}
+
+.post-text{
+margin-top:8px;
+line-height:1.4;
+font-size:16px;
+}
+
 </style>
 </head>
+
 <body>
 
-<div class="chat-container">
-  <div class="chat-header">Mini Messenger Online</div>
-  <div class="messages" id="messages"></div>
-  <div class="input-container">
-    <input type="text" id="messageInput" placeholder="Введите сообщение...">
-    <button onclick="sendMessage()">Отправить</button>
-  </div>
+<div class="container">
+
+<div class="avatar">😎</div>
+
+<div class="name">CryptoGolod</div>
+<div class="username">@cryptogolod</div>
+
+<div class="menu">
+<button class="active">СТАТЬИ</button>
+<button class="inactive">ВИДЕО</button>
+<button class="inactive">СОЦСЕТИ</button>
 </div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script>
-  // 1️⃣ Вставь сюда свои настройки Firebase
-  const firebaseConfig = {
-    apiKey: "ВАШ_API_KEY",
-    authDomain: "ВАШ_PROJECT_ID.firebaseapp.com",
-    databaseURL: "https://ВАШ_PROJECT_ID.firebaseio.com",
-    projectId: "ВАШ_PROJECT_ID",
-    storageBucket: "ВАШ_PROJECT_ID.appspot.com",
-    messagingSenderId: "ВАШ_MESSAGING_ID",
-    appId: "ВАШ_APP_ID"
-  };
+</div>
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-  const messagesEl = document.getElementById('messages');
-  const inputEl = document.getElementById('messageInput');
+<div class="feed">
 
-  // Имя пользователя (можно менять для друга)
-  const username = prompt("Введите ваше имя") || "me";
+<div class="post">
+<div class="post-avatar">🪙</div>
+<div class="post-content">
+<div class="post-header">
+CryptoGolod <span>@cryptogolod · 12 июн 2026</span>
+</div>
+<div class="post-text">
+Новички в крипте часто думают, что нужно сразу инвестировать большие деньги. На самом деле многие начинают с бонусов бирж и простых заданий. Иногда этого хватает, чтобы получить первый депозит и начать торговать.
+</div>
+</div>
+</div>
 
-  // Отправка сообщения
-  function sendMessage() {
-    const text = inputEl.value.trim();
-    if (!text) return;
-    db.ref('messages').push({ text, user: username, timestamp: Date.now() });
-    inputEl.value = '';
-  }
+<div class="post">
+<div class="post-avatar">🪙</div>
+<div class="post-content">
+<div class="post-header">
+CryptoGolod <span>@cryptogolod · 10 июн 2026</span>
+</div>
+<div class="post-text">
+Если вы только начинаете изучать трейдинг, не спешите открывать большие сделки. Лучше изучить риск-менеджмент и научиться работать с небольшими суммами. Это спасает депозит в долгосрочной перспективе.
+</div>
+</div>
+</div>
 
-  // Получение сообщений в реальном времени
-  db.ref('messages').on('value', snapshot => {
-    const data = snapshot.val() || {};
-    messagesEl.innerHTML = '';
-    Object.values(data).sort((a,b)=>a.timestamp-b.timestamp).forEach(msg => {
-      const msgEl = document.createElement('div');
-      msgEl.className = 'message ' + (msg.user === username ? 'me' : 'friend');
-      msgEl.textContent = msg.user + ": " + msg.text;
-      messagesEl.appendChild(msgEl);
-    });
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  });
+<div class="post">
+<div class="post-avatar">🪙</div>
+<div class="post-content">
+<div class="post-header">
+CryptoGolod <span>@cryptogolod · 8 июн 2026</span>
+</div>
+<div class="post-text">
+Многие трейдеры используют несколько аккаунтов для работы с различными сервисами. Для этого применяют прокси и антидетект-браузеры. Это обычная практика для тех, кто занимается арбитражем и маркетингом.
+</div>
+</div>
+</div>
 
-  inputEl.addEventListener('keypress', e => {
-    if (e.key === 'Enter') sendMessage();
-  });
-</script>
+<div class="post">
+<div class="post-avatar">🪙</div>
+<div class="post-content">
+<div class="post-header">
+CryptoGolod <span>@cryptogolod · 5 июн 2026</span>
+</div>
+<div class="post-text">
+Один из самых недооценённых способов заработка в крипте — партнёрские программы бирж. Если у вас есть сайт или трафик, можно получать процент с торговых комиссий пользователей.
+</div>
+</div>
+</div>
+
+<div class="post">
+<div class="post-avatar">🪙</div>
+<div class="post-content">
+<div class="post-header">
+CryptoGolod <span>@cryptogolod · 2 июн 2026</span>
+</div>
+<div class="post-text">
+Перед тем как инвестировать в новый криптопроект, всегда проверяйте команду, токеномику и активность сообщества. Иногда даже простая проверка может защитить от сомнительных проектов.
+</div>
+</div>
+</div>
+
+</div>
 
 </body>
 </html>
