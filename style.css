@@ -1,0 +1,168 @@
+/* Базовые настройки */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #e0e0e0;
+    background-color: #0a0c0f;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Шапка */
+.site-header {
+    background: #0f1217;
+    border-bottom: 1px solid #2a2f3a;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px);
+    background-color: rgba(10, 12, 15, 0.95);
+}
+
+.site-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #f7931a; /* Биткоин-оранжевый */
+}
+
+nav a {
+    color: #b0b7c4;
+    text-decoration: none;
+    margin-left: 25px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #f7931a;
+}
+
+/* Карточки */
+.card {
+    background: #14181f;
+    border: 1px solid #2a2f3a;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(247, 147, 26, 0.1);
+    border-color: #f7931a;
+}
+
+.card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+.card h3 a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.card h3 a:hover {
+    color: #f7931a;
+}
+
+.post-meta {
+    color: #7b8a9b;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed #2a2f3a;
+    padding-bottom: 15px;
+}
+
+.read-more {
+    color: #f7931a;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* Сетка для статей */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* Футер */
+.site-footer {
+    background: #0f1217;
+    border-top: 1px solid #2a2f3a;
+    padding: 30px 0;
+    margin-top: 50px;
+    text-align: center;
+    color: #7b8a9b;
+}
+
+/* Страница со статьей */
+.article {
+    background: #14181f;
+    border-radius: 16px;
+    padding: 40px;
+    margin: 30px 0;
+}
+
+.article h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.article .post-meta {
+    font-size: 1rem;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.article p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.article h2 {
+    font-size: 1.8rem;
+    margin: 40px 0 20px;
+    color: #f7931a;
+}
+
+.article blockquote {
+    border-left: 4px solid #f7931a;
+    padding-left: 20px;
+    margin: 30px 0;
+    font-style: italic;
+    color: #b0b7c4;
+}
+
+.article pre {
+    background: #0a0c0f;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #2a2f3a;
+}
