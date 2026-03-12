@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mini Messenger</title>
+<title>Mini Messenger Online</title>
 <style>
   body {
     margin: 0;
@@ -43,7 +43,6 @@
     max-width: 70%;
     padding: 10px 15px;
     border-radius: 20px;
-    position: relative;
     word-wrap: break-word;
   }
   .message.me {
@@ -83,7 +82,7 @@
 <body>
 
 <div class="chat-container">
-  <div class="chat-header">Mini Messenger</div>
+  <div class="chat-header">Mini Messenger Online</div>
   <div class="messages" id="messages"></div>
   <div class="input-container">
     <input type="text" id="messageInput" placeholder="Введите сообщение...">
@@ -91,42 +90,50 @@
   </div>
 </div>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
+  // 1️⃣ Вставь сюда свои настройки Firebase
+  const firebaseConfig = {
+    apiKey: "ВАШ_API_KEY",
+    authDomain: "ВАШ_PROJECT_ID.firebaseapp.com",
+    databaseURL: "https://ВАШ_PROJECT_ID.firebaseio.com",
+    projectId: "ВАШ_PROJECT_ID",
+    storageBucket: "ВАШ_PROJECT_ID.appspot.com",
+    messagingSenderId: "ВАШ_MESSAGING_ID",
+    appId: "ВАШ_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
   const messagesEl = document.getElementById('messages');
   const inputEl = document.getElementById('messageInput');
 
-  // Загрузка сообщений из localStorage
-  let messages = JSON.parse(localStorage.getItem('miniMessengerMessages')) || [];
+  // Имя пользователя (можно менять для друга)
+  const username = prompt("Введите ваше имя") || "me";
 
-  function renderMessages() {
-    messagesEl.innerHTML = '';
-    messages.forEach(msg => {
-      const msgEl = document.createElement('div');
-      msgEl.className = 'message ' + msg.user;
-      msgEl.textContent = msg.text;
-      messagesEl.appendChild(msgEl);
-    });
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
-
+  // Отправка сообщения
   function sendMessage() {
     const text = inputEl.value.trim();
     if (!text) return;
-    const message = { text, user: 'me' };
-    messages.push(message);
-    localStorage.setItem('miniMessengerMessages', JSON.stringify(messages));
-    renderMessages();
+    db.ref('messages').push({ text, user: username, timestamp: Date.now() });
     inputEl.value = '';
-    // имитация ответа друга
-    setTimeout(() => {
-      const friendMessage = { text: 'Ответ друга: ' + text.split('').reverse().join(''), user: 'friend' };
-      messages.push(friendMessage);
-      localStorage.setItem('miniMessengerMessages', JSON.stringify(messages));
-      renderMessages();
-    }, 1000);
   }
 
-  renderMessages();
+  // Получение сообщений в реальном времени
+  db.ref('messages').on('value', snapshot => {
+    const data = snapshot.val() || {};
+    messagesEl.innerHTML = '';
+    Object.values(data).sort((a,b)=>a.timestamp-b.timestamp).forEach(msg => {
+      const msgEl = document.createElement('div');
+      msgEl.className = 'message ' + (msg.user === username ? 'me' : 'friend');
+      msgEl.textContent = msg.user + ": " + msg.text;
+      messagesEl.appendChild(msgEl);
+    });
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  });
+
   inputEl.addEventListener('keypress', e => {
     if (e.key === 'Enter') sendMessage();
   });
