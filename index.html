@@ -1,92 +1,749 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CryptoSphere</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoSocial — Профиль</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<link rel="stylesheet" href="style.css">
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        /* Layout */
+        .app {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Left Sidebar */
+        .sidebar-left {
+            width: 280px;
+            border-right: 1px solid #1f1f2e;
+            padding: 20px 16px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            background-color: #0a0a0f;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 32px;
+            padding-left: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            border-radius: 30px;
+            color: #b0b0c0;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            width: 24px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #1f1f2e;
+            color: white;
+        }
+
+        .nav-item.active i {
+            color: #a855f7;
+        }
+
+        .nav-section {
+            margin: 24px 0 16px;
+            padding-left: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b6b7a;
+        }
+
+        .connect-wallet {
+            margin-top: 24px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            width: 100%;
+        }
+
+        .connect-wallet:hover {
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 600px;
+            border-right: 1px solid #1f1f2e;
+        }
+
+        /* Profile Header */
+        .profile-cover {
+            height: 150px;
+            background: linear-gradient(90deg, #1f1f2e, #2a1a3a);
+            position: relative;
+        }
+
+        .profile-info {
+            padding: 0 20px 20px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            border: 4px solid #0a0a0f;
+            position: absolute;
+            top: -50px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .profile-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .action-btn {
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid #a855f7;
+            background: transparent;
+            color: #a855f7;
+            transition: 0.2s;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            color: white;
+            border: none;
+        }
+
+        .action-btn.primary:hover {
+            opacity: 0.9;
+        }
+
+        .action-btn:hover {
+            background-color: #a855f7;
+            color: white;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 40px;
+        }
+
+        .profile-handle {
+            color: #6b6b7a;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .profile-bio {
+            margin: 12px 0;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 24px;
+            margin: 16px 0;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .stat-label {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .profile-links {
+            display: flex;
+            gap: 16px;
+            color: #6b6b7a;
+            margin: 16px 0;
+        }
+
+        .profile-links a {
+            color: #a855f7;
+            text-decoration: none;
+        }
+
+        .nft-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 20px 0;
+        }
+
+        .nft-item {
+            aspect-ratio: 1;
+            background-color: #1a1a24;
+            border-radius: 12px;
+            border: 1px solid #2a2a35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b6b7a;
+            font-size: 12px;
+        }
+
+        /* Tabs */
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid #1f1f2e;
+            margin-top: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 16px 0;
+            font-weight: 600;
+            color: #b0b0c0;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab.active {
+            color: white;
+            border-bottom-color: #a855f7;
+        }
+
+        /* Feed items (same as before) */
+        .feed-item {
+            padding: 20px;
+            border-bottom: 1px solid #1f1f2e;
+            display: flex;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .feed-item:hover {
+            background-color: #0f0f17;
+        }
+
+        .feed-item .avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7, #3b82f6);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+        }
+
+        .feed-content {
+            flex: 1;
+        }
+
+        .feed-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+
+        .feed-author {
+            font-weight: 700;
+            color: white;
+        }
+
+        .feed-handle {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .feed-time {
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .token-gate {
+            background-color: #2a1a3a;
+            border: 1px solid #a855f7;
+            border-radius: 16px;
+            padding: 4px 10px;
+            font-size: 12px;
+            color: #a855f7;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+        }
+
+        .feed-text {
+            margin: 8px 0 12px;
+            white-space: pre-line;
+        }
+
+        .feed-media {
+            background-color: #1a1a24;
+            border-radius: 16px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b6b7a;
+            margin: 12px 0;
+            border: 1px solid #2a2a35;
+        }
+
+        .feed-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 12px;
+            color: #6b6b7a;
+            font-size: 14px;
+        }
+
+        .feed-stats i {
+            margin-right: 6px;
+            color: #a855f7;
+        }
+
+        .tip-button {
+            background: transparent;
+            border: 1px solid #a855f7;
+            border-radius: 20px;
+            padding: 4px 12px;
+            color: #a855f7;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-left: auto;
+        }
+
+        .tip-button:hover {
+            background: #a855f7;
+            color: white;
+        }
+
+        /* Right Sidebar */
+        .sidebar-right {
+            width: 320px;
+            padding: 20px 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .search-box {
+            background-color: #1a1a24;
+            border-radius: 30px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .search-box i {
+            color: #6b6b7a;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            outline: none;
+            width: 100%;
+        }
+
+        .widget {
+            background-color: #1a1a24;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .widget-title {
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .trend-item, .follow-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .trend-info h4 {
+            font-size: 16px;
+        }
+
+        .trend-info p {
+            font-size: 14px;
+            color: #6b6b7a;
+        }
+
+        .follow-btn {
+            background: transparent;
+            border: 1px solid #a855f7;
+            border-radius: 30px;
+            padding: 6px 16px;
+            color: #a855f7;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .crypto-price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .price-up {
+            color: #10b981;
+        }
+
+        .price-down {
+            color: #ef4444;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 1000px) {
+            .sidebar-right {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-left {
+                display: none;
+            }
+            .main-content {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
+<div class="app">
+    <!-- Левая боковая панель (навигация) -->
+    <aside class="sidebar-left">
+        <div class="logo">CryptoSocial</div>
+        <div class="nav-item">
+            <i class="fas fa-home"></i> <span>Главная</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-search"></i> <span>Поиск</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-bell"></i> <span>Уведомления</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-envelope"></i> <span>Сообщения</span>
+        </div>
+        <div class="nav-item active">
+            <i class="fas fa-user"></i> <span>Профиль</span>
+        </div>
 
-<header>
-<h1>CryptoSphere</h1>
-<nav>
-<a href="#feed">Feed</a>
-<a href="#influencers">Influencers</a>
-<a href="#projects">Projects</a>
-</nav>
-</header>
+        <div class="nav-section">Крипто</div>
+        <div class="nav-item">
+            <i class="fas fa-coins"></i> <span>Токен-гейтинг</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-chart-line"></i> <span>Графики</span>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-image"></i> <span>NFT галерея</span>
+        </div>
 
-<section class="hero">
-<h2>Social Network for Crypto World</h2>
-<p>Connect exchanges, influencers, and Web3 projects</p>
-</section>
+        <button class="connect-wallet">
+            <i class="fas fa-wallet"></i> Подключить кошелёк
+        </button>
+    </aside>
 
-<section id="createPost" class="create-post">
-<textarea id="postInput" placeholder="Share something about crypto..."></textarea>
-<button onclick="createPost()">Post</button>
-</section>
+    <!-- Основной контент (профиль) -->
+    <main class="main-content">
+        <!-- Шапка профиля с обложкой и аватаром -->
+        <div class="profile-cover"></div>
+        <div class="profile-info">
+            <div class="profile-avatar">C</div>
+            <div class="profile-actions">
+                <button class="action-btn"><i class="fas fa-hand-holding-usd"></i> Tip</button>
+                <button class="action-btn">Написать</button>
+                <button class="action-btn primary">Подписаться</button>
+            </div>
+            <div class="profile-name">CryptoWhale</div>
+            <div class="profile-handle">@cryptowhale · кошелёк: 0x3f...c2e1</div>
+            <div class="profile-bio">
+                🐋 Криптоэнтузиаст. Делюсь аналитикой и новостями. Не инвестиционный совет.
+            </div>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-number">1,234</span>
+                    <span class="stat-label">постов</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">45.6K</span>
+                    <span class="stat-label">подписчиков</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">328</span>
+                    <span class="stat-label">подписок</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">89K</span>
+                    <span class="stat-label">лайков</span>
+                </div>
+            </div>
+            <div class="profile-links">
+                <span><i class="fas fa-link"></i> <a href="#">cryptowhale.eth</a></span>
+                <span><i class="fab fa-twitter"></i> <a href="#">@cryptowhale</a></span>
+                <span><i class="fab fa-discord"></i> <a href="#">whale.eth</a></span>
+            </div>
 
-<section id="feed" class="feed">
-<h2>Community Feed</h2>
-<div id="posts"></div>
-</section>
+            <!-- Галерея NFT -->
+            <div class="nft-gallery">
+                <div class="nft-item"><i class="fas fa-image"></i> NFT #1</div>
+                <div class="nft-item"><i class="fas fa-image"></i> NFT #2</div>
+                <div class="nft-item"><i class="fas fa-image"></i> NFT #3</div>
+                <div class="nft-item"><i class="fas fa-image"></i> NFT #4</div>
+                <div class="nft-item"><i class="fas fa-image"></i> NFT #5</div>
+                <div class="nft-item"><i class="fas fa-image"></i> NFT #6</div>
+            </div>
 
-<section id="influencers">
-<h2>Top Crypto Influencers</h2>
+            <!-- Вкладки профиля -->
+            <div class="profile-tabs">
+                <div class="tab active">Посты</div>
+                <div class="tab">NFT</div>
+                <div class="tab">Медиа</div>
+                <div class="tab">Лайки</div>
+            </div>
+        </div>
 
-<div class="cards">
+        <!-- Лента постов пользователя -->
+        <!-- Пост 1 -->
+        <div class="feed-item">
+            <div class="avatar-small">C</div>
+            <div class="feed-content">
+                <div class="feed-header">
+                    <span class="feed-author">CryptoWhale</span>
+                    <span class="feed-handle">@cryptowhale · 2ч</span>
+                    <span class="token-gate"><i class="fas fa-lock"></i> Только для держателей $WHALE</span>
+                </div>
+                <div class="feed-text">
+                    Только что зашёл в новый пул ликвидности на Uniswap. APY просто космос! 🚀 Кто тоже там?
+                </div>
+                <div class="feed-media">
+                    <i class="fas fa-chart-bar" style="font-size: 48px;"></i> График WHALE/ETH
+                </div>
+                <div class="feed-stats">
+                    <span><i class="fas fa-heart"></i> 342</span>
+                    <span><i class="fas fa-comment"></i> 28</span>
+                    <span><i class="fas fa-retweet"></i> 12</span>
+                    <span><i class="fas fa-coins"></i> 0.5 ETH</span>
+                    <button class="tip-button"><i class="fas fa-hand-holding-usd"></i> TIP</button>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-<h3>CryptoAlpha</h3>
-<p>Bitcoin & DeFi analyst</p>
+        <!-- Пост 2 -->
+        <div class="feed-item">
+            <div class="avatar-small">C</div>
+            <div class="feed-content">
+                <div class="feed-header">
+                    <span class="feed-author">CryptoWhale</span>
+                    <span class="feed-handle">@cryptowhale · 5ч</span>
+                </div>
+                <div class="feed-text">
+                    Анализ рынка: биткоин пробил $68k, альты подтягиваются. Ждём коррекцию или продолжение?
+                </div>
+                <div class="feed-stats">
+                    <span><i class="fas fa-heart"></i> 1.2K</span>
+                    <span><i class="fas fa-comment"></i> 89</span>
+                    <span><i class="fas fa-retweet"></i> 45</span>
+                    <span><i class="fas fa-coins"></i> 0.2 ETH</span>
+                    <button class="tip-button"><i class="fas fa-hand-holding-usd"></i> TIP</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пост 3 с NFT -->
+        <div class="feed-item">
+            <div class="avatar-small">C</div>
+            <div class="feed-content">
+                <div class="feed-header">
+                    <span class="feed-author">CryptoWhale</span>
+                    <span class="feed-handle">@cryptowhale · 1д</span>
+                </div>
+                <div class="feed-text">
+                    Приобрёл нового кита в коллекцию! 🐋 #NFT #CryptoArt
+                </div>
+                <div class="feed-media">
+                    <i class="fas fa-image" style="font-size: 48px;"></i> [Изображение NFT]
+                </div>
+                <div class="feed-stats">
+                    <span><i class="fas fa-heart"></i> 567</span>
+                    <span><i class="fas fa-comment"></i> 34</span>
+                    <span><i class="fas fa-retweet"></i> 23</span>
+                    <span><i class="fas fa-coins"></i> 0.1 ETH</span>
+                    <button class="tip-button"><i class="fas fa-hand-holding-usd"></i> TIP</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Правая боковая панель (виджеты) -->
+    <aside class="sidebar-right">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Поиск">
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Крипто-тренды</div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#Bitcoin</h4>
+                    <p>$67,890 <span class="price-up">+2.3%</span></p>
+                </div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#Ethereum</h4>
+                    <p>$3,450 <span class="price-up">+1.2%</span></p>
+                </div>
+            </div>
+            <div class="trend-item">
+                <div class="trend-info">
+                    <h4>#PEPE</h4>
+                    <p>$0.000012 <span class="price-down">-5.1%</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Кого читать</div>
+            <div class="follow-item">
+                <div>
+                    <strong>binance</strong><br>
+                    <span style="color:#6b6b7a;">@binance</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+            <div class="follow-item">
+                <div>
+                    <strong>vitalik.eth</strong><br>
+                    <span style="color:#6b6b7a;">@vitalik</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+            <div class="follow-item">
+                <div>
+                    <strong>punk6529</strong><br>
+                    <span style="color:#6b6b7a;">@punk</span>
+                </div>
+                <button class="follow-btn">Подп.</button>
+            </div>
+        </div>
+
+        <div class="widget">
+            <div class="widget-title">Цены</div>
+            <div class="crypto-price">
+                <span>BTC</span> <span class="price-up">▲ $67,890</span>
+            </div>
+            <div class="crypto-price">
+                <span>ETH</span> <span class="price-up">▲ $3,450</span>
+            </div>
+            <div class="crypto-price">
+                <span>BNB</span> <span class="price-down">▼ $580</span>
+            </div>
+            <div class="crypto-price">
+                <span>SOL</span> <span class="price-up">▲ $172</span>
+            </div>
+        </div>
+    </aside>
 </div>
 
-<div class="card">
-<h3>ChainQueen</h3>
-<p>NFT & Web3 trends</p>
-</div>
-
-<div class="card">
-<h3>BlockGuru</h3>
-<p>Technical crypto insights</p>
-</div>
-
-</div>
-</section>
-
-<section id="projects">
-<h2>Trending Projects</h2>
-
-<div class="cards">
-
-<div class="card">
-<h3>NovaChain</h3>
-<p>Next generation Layer-1</p>
-</div>
-
-<div class="card">
-<h3>MetaSwap</h3>
-<p>Decentralized exchange</p>
-</div>
-
-<div class="card">
-<h3>OrbitNFT</h3>
-<p>NFT marketplace</p>
-</div>
-
-</div>
-</section>
-
-<footer>
-<p>© 2026 CryptoSphere</p>
-</footer>
-
-<script src="script.js"></script>
-
+<!-- Небольшой скрипт для переключения вкладок (демо) -->
+<script>
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
 </body>
 </html>
