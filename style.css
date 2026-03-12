@@ -1,0 +1,84 @@
+body{
+font-family: 'Inter', sans-serif;
+background:#0f0f1a;
+color:white;
+margin:0;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+padding:20px 10%;
+background:#151528;
+}
+
+nav a{
+color:white;
+margin-left:20px;
+text-decoration:none;
+}
+
+.hero{
+text-align:center;
+padding:80px 20px;
+background:linear-gradient(135deg,#4f46e5,#9333ea);
+}
+
+.hero h2{
+font-size:40px;
+}
+
+.create-post{
+padding:40px 10%;
+text-align:center;
+}
+
+textarea{
+width:60%;
+height:80px;
+border:none;
+border-radius:10px;
+padding:10px;
+}
+
+button{
+margin-top:10px;
+padding:10px 25px;
+border:none;
+border-radius:8px;
+background:#6366f1;
+color:white;
+cursor:pointer;
+}
+
+.feed{
+padding:40px 10%;
+}
+
+.post{
+background:#1b1b2e;
+padding:15px;
+margin-bottom:10px;
+border-radius:10px;
+}
+
+.cards{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+padding:20px 10%;
+}
+
+.card{
+background:#1b1b2e;
+padding:20px;
+border-radius:12px;
+width:200px;
+}
+
+footer{
+text-align:center;
+padding:20px;
+background:#151528;
+margin-top:40px;
+}
